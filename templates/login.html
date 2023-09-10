@@ -1,0 +1,65 @@
+{% extends 'insert.html' %}
+    {% block bodyarea %}
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" height="98%">
+        <tr>
+            <td align="center" valign="middle"><table width="50%" border="0" cellspacing="3" cellpadding="0" class="outer">
+                <tr>
+                    <td>
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="inner" align="center">
+                            <tr>
+                                <td align="center">
+                                    <img src="{{url_for('static', filename='images/login.png') }}" style="margin-top:20px; margin-bottom:10px; width:320px;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center" class="title" nowrap></td>
+                            </tr>
+                            <tr>
+                                <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                    <tr>
+                                        <td><form name="login" method="post">
+                                            <table border="0" cellspacing="0" cellpadding="4" width="100" align="center">
+                                                <tr>
+                                                    <div class="input-group mb-3">
+                                                        <span class="input-group-text text-center col-md-2 justify-content-center">手機號碼</span>
+                                                        <input type="text" class="form-control" id="phone" placeholder="請輸入手機號碼" name="phone">
+                                                    </div>
+                                                </tr>
+                                                <tr>
+                                                    <div class="input-group mb-3">
+                                                        <span class="input-group-text text-center col-md-2 justify-content-center">密碼</span>
+                                                        <input type="password" class="form-control" id="pwd" placeholder="yyyymmdd" name="pswd">
+                                                    </div>
+                                                </tr>
+                                                <tr>
+                                                    {% if errmsg %}
+                                                    <div class="alert alert-danger alert-dismissible fade show text-center">
+                                                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                                        <strong>注意!</strong>{{errmsg}}
+                                                    </div>
+                                                    {% endif %}
+                                                    <!-- <div style="display: flex; align-items: center; justify-content: center; height: 100px;">
+                                                        <div class="form-check">
+                                                            <input type="checkbox" class="form-check-input" id="check1" name="option1" value="something" checked>
+                                                            <label for="check1" class="form-check-label">在這部電腦上記住我的登入資料。</label>
+                                                        </div>
+                                                    </div> -->
+                                                </tr>
+                                                    <div class="text-center btn-center">
+                                                        <button type="submit" class="btn btn-outline-success">登入</button>
+                                                        <div class="mt-3">
+                                                            <a href="/snp" class="btn">註冊帳號</a>
+                                                        </div>
+                                                    </div>
+                                                </tr>
+                                            </table>
+                                        </form></td>
+                                    </tr>
+                                </table></td>
+                            </tr>
+                        </table></td>
+                    </tr>
+                </table></td>
+            </tr>
+        </table>
+        {% endblock bodyarea %}

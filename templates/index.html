@@ -1,0 +1,108 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <title>夯嬤集團</title>
+
+    <script>
+        var rowCounter = 1; // 用于追踪添加的行数
+        function addRow() {
+            // 创建一个新的表格行
+            var newRow = document.createElement('div');
+            newRow.className = 'mt-2 d-flex align-items-center justify-content-center';
+
+            rowCounter++; // 递增行数
+
+            var rowHtml = `
+                    <div class="col-md-10">
+                        <div class="row">
+                            <span class="col-md-2 input-group-text text-center">名稱</span>
+                            <input type="text" class="col form-control" placeholder="雞腿/肉片...." name="pickles_name${rowCounter}">
+                        </div>
+                        <div class="row">
+                            <div class="col row">
+                                <span class="col input-group-text text-center">數量</span>
+                                <input type="number" class="col form-control" placeholder="" name="pickles_quantity${rowCounter}" min="0" step="1" pattern="[0-9]+">
+                            </div>
+                            <div class="col row">
+                                <span class="col input-group-text text-center">金額</span>
+                                <input type="number" class="col form-control" placeholder="" name="pickles_price${rowCounter}" min="0" step="1" pattern="[0-9]+">
+                            </div>
+                        </div>
+                    </div>
+            `;
+
+            newRow.innerHTML = rowHtml;
+
+            // 将新行添加到表单内的容器中
+            var container = document.getElementById('additionalRowsContainer');
+            container.appendChild(newRow);
+        }
+
+        function deleteRow() {
+            // 删除最后一个表格行
+            var container = document.getElementById('additionalRowsContainer');
+            var rows = container.querySelectorAll('.mt-2.d-flex');
+            if (rows.length > 0) {
+                container.removeChild(rows[rows.length - 1]);
+                rowCounter--; // 递减行数
+            }
+        }
+    </script>
+
+</head>
+<body>
+    <div class="container-fluid bg-dark row">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-md-6">
+                <img src="{{url_for('static', filename='images/Background.jpg') }}" width="320px" height="140px">
+            </div>
+            <div class="col-md-3 text-center">
+                <div class="text-wrap">
+                    <a href="#" class="h2 text-white text-decoration-none">購買清單</a>
+                </div>
+            </div>
+            <div class="col-md-3 text-center">
+                <a href="#" class="h2 text-white text-decoration-none">新增購買紀錄</a>
+            </div>
+            </div>
+        </div>
+    </div>
+    <form>
+        <div class="container-fluid d-flex align-items-center justify-content-center">
+            <div class="shadow p-3 mb-5 rounded col-md-9 bg-success text-dark bg-opacity-10">
+                <div class="mt-2 d-flex align-items-center justify-content-center">
+                    <div class="col-md-10">
+                        <div class="row">
+                            <span class="col-md-2 input-group-text text-center">名稱</span>
+                            <input type="text" class="col form-control" placeholder="雞腿/肉片...." name="pickles_name1">
+                        </div>
+                        <div class="row">
+                            <div class="col row">
+                                <span class="col input-group-text text-center">數量</span>
+                                <input type="number" class="col form-control" placeholder="" name="pickles_quantity1" min="0" step="1" pattern="[0-9]+">
+                            </div>
+                            <div class="col row">
+                                <span class="col input-group-text text-center">金額</span>
+                                <input type="number" class="col form-control" placeholder="" name="pickles_price1" min="0" step="1" pattern="[0-9]+">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="additionalRowsContainer">
+                    <!-- 新表格行将在此处添加 -->
+                </div>
+                <div class="mt-2 d-flex align-items-center justify-content-center">
+                    <button type="button" class="btn btn-primary" onclick="addRow()">新增欄位</button>
+                    <button type="button" class="btn btn-danger" onclick="deleteRow()">刪除欄位</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</body>
+
+</html>
