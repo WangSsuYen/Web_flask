@@ -90,24 +90,36 @@
 
 </head>
 <body>
-    <div class="container-fluid bg-dark row">
-        <div class="row justify-content-center align-items-center">
+    <div class="bg-dark">
+        <div class="row d-flex justify-content-center align-items-center">
             <div class="col-md-2">
                 <img src="{{url_for('static', filename='images/Background.jpg') }}" width="320px" height="140px">
             </div>
-            <div class="col-md-5 text-center">
-                <div class="text-wrap">
-                    <a href="#" class="h2 text-white text-decoration-none">購買清單</a>
-                </div>
+            <div class="col-md-4 text-center text-wrap">
+                <a href="#" class="h2 text-white text-decoration-none">購買清單</a>
             </div>
-            <div class="col-md-5 text-center">
+            <div class="col-md-4 text-center">
                 <a href="/ins" class="h2 text-white text-decoration-none">新增購買紀錄</a>
             </div>
+            <div class="col-md-2 text-right">
+                <a href="/logout" class="h5 text-white text-decoration-none">登出</a>
             </div>
         </div>
     </div>
+    {% if succ_msg %}
+    <div class="alert alert-success alert-dismissible fade show text-center">
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <strong>恭喜!</strong>{{succ_msg}}
+    </div>
+    {% endif %}
+    {% if errmsg %}
+    <div class="alert alert-danger alert-dismissible fade show text-center">
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <strong>注意!</strong>{{errmsg}}
+    </div>
+    {% endif %}
     {% block bodyarea %}
-    <form action ="/" method = "post">
+    <form  method = "post">
         <div class="container-fluid d-flex align-items-center justify-content-center">
             <div class="shadow p-3 mb-5 rounded col-md-9 bg-success text-dark bg-opacity-10">
                 <h1 class="text-center mt-3">購買清單</h1>

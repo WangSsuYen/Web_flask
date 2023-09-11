@@ -22,6 +22,7 @@ class connect_data:
 
 @app.route("/", methods=["GET", "POST"])
 def login():
+    mesg = None
     if request.method == "POST":
         result = None
         login_phone = request.form.get("phone")
@@ -50,6 +51,7 @@ def login():
 
 @app.route("/snp", methods=["GET", "POST"])
 def signup():
+    mesg = None
     if request.method == "POST":
         user_phone = request.form.get("phone")
         user_password = request.form.get('pswd')
@@ -84,35 +86,55 @@ def signup():
 
 @app.route("/ins", methods=["GET", "POST"])
 def insert():
-    if "username" in session:
-        if request.method == "GET":
+    mesg = None
+    succ_mesg = None
+    if request.method == "GET":
+        if "username" not in session:
+            return redirect(url_for("login"))
+        else:
             print(session["username"])
             return render_template("insert.html")
 
-        else:
-            # 計算POST回傳數量
-            num_fields = len(request.form) // 4
-
-            for a in range(1, num_fields+1):
-                # 抓取POST回傳的數值
-                id = session['username']
-                item_name = request.form.get(f"pickles_name{a}")
-                quantity = request.form.get(f"pickles_quantity{a}")
-                kind = request.form.get(f"kind{a}")
-                price = request.form.get(f"pickles_price{a}")
-                # 抓取現在時間
-                Systime = datetime.now()
-
-                connection = connect_data()
-                conn = sql.connect(**connection.db_setting)
-                cursor = conn.cursor()
-                cursor.execute("INSERT INTO buy_food_tb (user_id ,item , count , kind , amount , creat_time) VALUES (? , ? , ? , ? , ? , ?);",
-                               (id, item_name, quantity, kind, price, Systime))
-                conn.commit()
-
     else:
-        esmg = "您尚未登入!"
-        return redirect(url_for("login"))
+        # 計算POST回傳數量
+        data_list = []
+        num_fields = len(request.form) // 4
+
+        for a in range(1, num_fields+1):
+            id = session['username']
+            item_name = request.form.get(f"pickles_name{a}")
+            quantity = request.form.get(f"pickles_quantity{a}")
+            kind = request.form.get(f"kind{a}")
+            price = request.form.get(f"pickles_price{a}")
+
+            if id == "" or item_name == "" or quantity == "" or kind == "" or price == "":
+                mesg = "有空資料，請重新檢查後再送出。"
+                return render_template("insert.html", errmsg=mesg)
+            # 判斷每筆資料無誤後，再存入data_list
+            data = {
+                "id": id,
+                "item_name": item_name,
+                "quantity": quantity,
+                "kind": kind,
+                "price": price
+            }
+            data_list.append(data)
+
+        connection = connect_data()
+        conn = sql.connect(**connection.db_setting)
+        cursor = conn.cursor()
+        for data in data_list:
+            id = data["id"]
+            item_name = data["item_name"]
+            quantity = data["quantity"]
+            kind = data["kind"]
+            price = data["price"]
+            Systime = datetime.now()  # 抓取現在時間
+            cursor.execute("INSERT INTO buy_food_tb (user_id ,item , count , kind , amount , creat_time) VALUES (%s , %s , %s , %s , %s , %s);",
+                           (id, item_name, quantity, kind, price, Systime))
+            conn.commit()
+        succ_mesg = "資料已儲存成功!"
+        return render_template("insert.html", succ_msg=succ_mesg)
 
 
 @app.route("/logout")
