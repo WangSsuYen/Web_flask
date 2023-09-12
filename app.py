@@ -20,6 +20,12 @@ class connect_data:
             "charset": "utf8"}
 
 
+@app.route("/logout")
+def logout():
+    session.pop('username', None)
+    return redirect(url_for("login"))
+
+
 @app.route("/", methods=["GET", "POST"])
 def login():
     mesg = None
@@ -38,7 +44,7 @@ def login():
 
             if result:
                 session['username'] = request.form.get("phone")
-                return redirect(url_for("insert"))
+                return redirect(url_for("all_list"))
             else:
                 mesg = "用户名或密码错误"
                 return render_template("login.html", errmsg=mesg)
@@ -137,10 +143,36 @@ def insert():
         return render_template("insert.html", succ_msg=succ_mesg)
 
 
-@app.route("/logout")
-def logout():
-    session.pop('username', None)
-    return redirect(url_for("login"))
+@app.route("/all_list")
+def all_list():
+    chi_col_name = {"user_id": "使用者", "item": "購買項目", "count": "數量", "kind": "單位",
+                    "amount": "價格", "creat_time": "創單時間"}
+    mesg = None
+    succ_mesg = None
+    if request.method == "GET":
+        if "username" not in session:
+            return redirect(url_for("login"))
+        else:
+            print(session["username"])
+            connection = connect_data()
+            conn = sql.connect(**connection.db_setting)
+            cursor = conn.cursor()
+            cursor.execute(
+                "SELECT * FROM buy_food_tb ORDER BY user_id;")
+            result = cursor.fetchall()
+            # --取欄位名稱
+            col_name = []
+            for col in cursor.description:
+                col_name.append(col[0])
+            # --將欄位名稱中文化
+            col_name_mapped = []
+            for col in col_name:
+                col_name_mapped.append(chi_col_name.get(col))
+            print(col_name_mapped)
+            print(result)
+            # --
+
+            return render_template("all_list.html", col=col_name_mapped)
 
 
 if __name__ == '__main__':
