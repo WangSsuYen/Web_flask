@@ -46,7 +46,7 @@ def login():
                 session['username'] = request.form.get("phone")
                 return redirect(url_for("all_list"))
             else:
-                mesg = "用户名或密码错误"
+                mesg = "手機號碼或密碼錯誤"
                 return render_template("login.html", errmsg=mesg)
         except Exception as er:
             mesg = er
@@ -61,6 +61,7 @@ def signup():
     if request.method == "POST":
         user_phone = request.form.get("phone")
         user_password = request.form.get('pswd')
+        user_name = request.form.get('name')
         Systime = datetime.now()
         # --
         if not re.match(r"^[0][9]\d{8}$", user_phone):
@@ -71,6 +72,9 @@ def signup():
             mesg = "密碼格式錯誤，請重新輸入!"
             return render_template("signup.html", errmsg=mesg)
         # --
+        if user_name == "":
+            mesg = "姓名請勿空白"
+            return render_template("signup.html", errmsg=mesg)
         result = None
         connection = connect_data()
         conn = sql.connect(**connection.db_setting)
@@ -79,8 +83,8 @@ def signup():
             "SELECT * FROM user WHERE user_id = %s ; ", (user_phone))
         result = cursor.fetchone()
         if result == None:
-            cursor.execute("INSERT INTO user (user_id , user_password , creattm) VALUES (%s , %s , %s);",
-                           (user_phone, user_password, Systime))
+            cursor.execute("INSERT INTO user (user_id , user_password , creattm , user_name) VALUES (%s , %s , %s , %s);",
+                           (user_phone, user_password, Systime, user_name))
             conn.commit()
             return redirect(url_for("login"))
         else:
@@ -145,8 +149,8 @@ def insert():
 
 @app.route("/all_list")
 def all_list():
-    chi_col_name = {"user_id": "使用者", "item": "購買項目", "count": "數量", "kind": "單位",
-                    "amount": "價格", "creat_time": "創單時間"}
+    chi_col_name = {"user_name": "購買者", "item": "購買項目", "count": "數量",
+                    "kind": "單位", "amount": "價格", "creat_time": "創單時間"}
     mesg = None
     succ_mesg = None
     if request.method == "GET":
@@ -158,7 +162,10 @@ def all_list():
             conn = sql.connect(**connection.db_setting)
             cursor = conn.cursor()
             cursor.execute(
-                "SELECT * FROM buy_food_tb ORDER BY user_id;")
+                "SELECT user.user_name ,buy_food_tb.item , buy_food_tb.count , buy_food_tb.kind , \
+                    buy_food_tb.amount , buy_food_tb.creat_time FROM user JOIN buy_food_tb \
+                        ON user.user_id = buy_food_tb.user_id \
+                          ORDER BY buy_food_tb.user_id DESC;")
             result = cursor.fetchall()
             # --取欄位名稱
             col_name = []
@@ -168,12 +175,17 @@ def all_list():
             col_name_mapped = []
             for col in col_name:
                 col_name_mapped.append(chi_col_name.get(col))
+            # --PO資料
+            data = []
+            for p_data in result:
+                data.append(p_data)
+            print(data)
             print(col_name_mapped)
             print(result)
             # --
 
-            return render_template("all_list.html", col=col_name_mapped)
+            return render_template("all_list.html", col=col_name_mapped, data=data)
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=80, debug=True)

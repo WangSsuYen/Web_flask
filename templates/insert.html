@@ -37,7 +37,8 @@
                         <div class="row">
                             <div class="col row">
                                 <span class="col input-group-text text-center">數量</span>
-                                <input type="number" class="col form-control" placeholder="" name="pickles_quantity${rowCounter}" min="0" step="1" pattern="[0-9]+">
+                                <input type="number" class="col form-control" placeholder="" name="pickles_quantity${rowCounter}" min="0" step="1"
+                                pattern="[0-9]+" inputmode ="numeric">
                                 <select class="form-select col" name="kind${rowCounter}">
                                     <option value="1">包</option>
                                     <option value="2">支</option>
@@ -51,7 +52,8 @@
                             </div>
                             <div class="col row">
                                 <span class="col input-group-text text-center">金額</span>
-                                <input type="number" class="col form-control" placeholder="" name="pickles_price${rowCounter}" min="0" step="1" pattern="[0-9]+">
+                                <input type="number" class="col form-control" placeholder="" name="pickles_price${rowCounter}" min="0" step="1"
+                                pattern="[0-9]+" inputmode ="numeric">
                             </div>
                         </div>
                     </div>
@@ -91,14 +93,16 @@
 </head>
 <body>
     <div class="bg-dark">
-        <div class="row d-flex justify-content-center align-items-center">
-            <div class="col-md-2">
-                <img src="{{url_for('static', filename='images/Background.jpg') }}" width="320px" height="140px">
+        <div class="row">
+            <div>
+                <img class="rounded-circle mx-auto d-block mt-3" src="{{url_for('static', filename='images/Background.jpg') }}" width="320px" height="140px">
             </div>
-            <div class="col-md-4 text-center text-wrap">
+        </div>
+        <div class ="row mt-3">
+            <div class="col-md-5 text-center text-wrap">
                 <a href="/all_list" class="h2 text-white text-decoration-none">購買清單</a>
             </div>
-            <div class="col-md-4 text-center">
+            <div class="col-md-5 text-center">
                 <a href="/ins" class="h2 text-white text-decoration-none">新增購買紀錄</a>
             </div>
             <div class="col-md-2 text-right">
@@ -127,26 +131,29 @@
                     <div class="col-md-10">
                         <div class="row">
                             <span class="col-md-2 input-group-text text-center">名稱</span>
-                            <input type="text" class="col form-control" placeholder="雞腿/肉片...." name="pickles_name1">
+                            <input type="text" class="col form-control" placeholder="雞腿/肉片...." name="pickles_name1"
+                            value="{% if request.method == "POST" %}{{request.form.pickles_name1}}{% endif %}">
                         </div>
                         <div class="row">
                             <div class="col row">
                                 <span class="col input-group-text text-center">數量</span>
-                                <input type="number" class="col form-control" placeholder="" name="pickles_quantity1" min="0" step="1" pattern="[0-9]+">
+                                <input type="number" class="col form-control" placeholder="" name="pickles_quantity1" min="0" step="1"
+                                pattern="[0-9]+" inputmode ="numeric" value="{% if request.method == "POST" %}{{request.form.pickles_quantity1}}{% endif %}">
                                 <select class="form-select col" name="kind1">
-                                    <option value="1">包</option>
-                                    <option value="2">支</option>
-                                    <option value="3">個</option>
-                                    <option value="4">尾</option>
-                                    <option value="5">塊</option>
-                                    <option value="6">公克</option>
-                                    <option value="7">台斤</option>
-                                    <option value="8">公斤</option>
+                                    <option value="1"{% if request.form.kind1 == "1" %}selected{% endif %}>包</option>
+                                    <option value="2"{% if request.form.kind1 == "2" %}selected{% endif %}>支</option>
+                                    <option value="3"{% if request.form.kind1 == "3" %}selected{% endif %}>個</option>
+                                    <option value="4"{% if request.form.kind1 == "4" %}selected{% endif %}>尾</option>
+                                    <option value="5"{% if request.form.kind1 == "5" %}selected{% endif %}>塊</option>
+                                    <option value="6"{% if request.form.kind1 == "6" %}selected{% endif %}>公克</option>
+                                    <option value="7"{% if request.form.kind1 == "7" %}selected{% endif %}>台斤</option>
+                                    <option value="8"{% if request.form.kind1 == "8" %}selected{% endif %}>公斤</option>
                                 </select>
                             </div>
                             <div class="col row">
                                 <span class="col input-group-text text-center">金額</span>
-                                <input type="number" class="col form-control" placeholder="" name="pickles_price1" min="0" step="1" pattern="[0-9]+">
+                                <input type="number" class="col form-control" placeholder="" name="pickles_price1" min="0" step="1"
+                                pattern="[0-9]+" inputmode ="numeric" value="{% if request.method == "POST" %}{{request.form.pickles_price1}}{% endif %}">
                             </div>
                         </div>
                     </div>
@@ -155,7 +162,7 @@
                     <!-- 新表格行将在此处添加 -->
                 </div>
                 <div class="mt-2 d-flex align-items-center justify-content-center">
-                    <button type="button" class="btn btn-outline-primary" onclick="addRow()">
+                    <button type="button" class="btn btn-outline-success" onclick="addRow()">
                         <img src="{{url_for('static', filename='images/add.png') }}" width="24px" height="24px" alt="增加欄位"></button>
                     <button type="button" class="btn btn-outline-danger mx-3" onclick="deleteRow()">
                         <img src="{{url_for('static', filename='images/minus.png') }}" width="24px" height="24px" alt="刪除欄位">

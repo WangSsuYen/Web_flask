@@ -10,13 +10,18 @@
             </div>
             {% endif %}
             <div class="mb-3 mt-3">
-                <label for="email" class="form-label">手機號碼</label>
-                <input type="text" class="form-control" id="phone" placeholder="請輸入手機號碼" name="phone"
+                <label for="text" class="form-label">姓名</label>
+                <input type="text" class="form-control" id="name" placeholder="請輸入姓名" name="name"
+                value="{% if request.method == "POST" %}{{request.form.name}}{% endif %}">
+            </div>
+            <div class="mb-3 mt-3">
+                <label for="text" class="form-label">手機號碼</label>
+                <input type="text" class="form-control" id="phone" placeholder="請輸入手機號碼" name="phone" inputmode ="numeric"
                 value="{% if request.method == "POST" %}{{request.form.phone}}{% endif %}">
             </div>
             <div class="mb-3">
                 <label for="pwd" class="form-label">密碼</label>
-                <input type="password" class="form-control" id="pwd" placeholder="yyyymmdd" name="pswd">
+                <input type="password" class="form-control" id="pwd" placeholder="yyyymmdd" name="pswd" inputmode ="numeric">
             </div>
             <div class ="mt-5 mb-3">
             <button type="submit" class="btn btn-primary">註冊/Sumbit</button>

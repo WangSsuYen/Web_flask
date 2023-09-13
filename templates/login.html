@@ -22,21 +22,21 @@
                                                 <tr>
                                                     <div class="input-group mb-3">
                                                         <span class="input-group-text text-center col-md-2 justify-content-center">手機號碼</span>
-                                                        <input type="text" class="form-control" id="phone" placeholder="請輸入手機號碼" name="phone"
+                                                        <input type="text" class="form-control" id="phone" placeholder="請輸入手機號碼" name="phone" inputmode ="numeric"
                                                         value="{% if request.method == "POST" %}{{request.form.phone}}{% endif %}">
                                                     </div>
                                                 </tr>
                                                 <tr>
                                                     <div class="input-group mb-3">
                                                         <span class="input-group-text text-center col-md-2 justify-content-center">密碼</span>
-                                                        <input type="password" class="form-control" id="pwd" placeholder="yyyymmdd" name="pswd">
+                                                        <input type="password" class="form-control" id="pwd" placeholder="yyyymmdd" name="pswd" inputmode ="numeric">
                                                     </div>
                                                 </tr>
                                                 <tr>
                                                     {% if errmsg %}
                                                     <div class="alert alert-danger alert-dismissible fade show text-center">
                                                         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                                                        <strong>恭喜!</strong>{{errmsg}}
+                                                        <strong>注意!</strong>{{errmsg}}
                                                     </div>
                                                     {% endif %}
                                                     <!-- <div style="display: flex; align-items: center; justify-content: center; height: 100px;">

@@ -1,30 +1,35 @@
 {% extends 'insert.html' %}
 {% block bodyarea %}
-<table class="table">
-    <thead class="table-dark">
-      <tr>
-        {% for a in col %}
-        <th>{{a}}</th>
+<div class="mt-2">
+  <table class="table table-dark">
+      <thead class="table-dark">
+        <tr>
+          {% for a in col %}
+          <th >{{a}}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for b in data %}
+        <tr>
+          <td>{{b.0}}</td>
+          <td>{{b.1}}</td>
+          <td>{{b.2}}</td>
+          <td>{% if b.3 == "1" %}包
+              {% elif b.3 == "2" %}支
+              {% elif b.3 == "3" %}個
+              {% elif b.3 == "4" %}尾
+              {% elif b.3 == "5" %}塊
+              {% elif b.3 == "6" %}公克
+              {% elif b.3 == "7" %}臺斤
+              {% elif b.3 == "8" %}公斤
+              {% endif %}</td>
+          <td>{{b.4}}</td>
+          <td>{{b.5}}</td>
+        </tr>
         {% endfor %}
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>John</td>
-        <td>Doe</td>
-        <td>john@example.com</td>
-      </tr>
-      <tr>
-        <td>Mary</td>
-        <td>Moe</td>
-        <td>mary@example.com</td>
-      </tr>
-      <tr>
-        <td>July</td>
-        <td>Dooley</td>
-        <td>july@example.com</td>
-      </tr>
-    </tbody>
-  </table>
+      </tbody>
+    </table>
+  </div>
 
 {% endblock bodyarea %}
