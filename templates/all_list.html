@@ -1,8 +1,11 @@
 {% extends 'insert.html' %}
 {% block bodyarea %}
-<div class="mt-2">
-  <table class="table table-dark">
-      <thead class="table-dark">
+<div class="mt-2 p-2">
+  <table class="table table-success ">
+      <thead class="table-success">
+        <tr class="text-center fs-3">
+          <th colspan="{{ col|length }}">您的購買清單</th> <!--讓此欄位背景渲染整個欄位，並讓字體利立中央-->
+        </tr>
         <tr>
           {% for a in col %}
           <th >{{a}}</th>
@@ -10,7 +13,7 @@
         </tr>
       </thead>
       <tbody>
-        {% for b in data %}
+        {% for b in self_data %}
         <tr>
           <td>{{b.0}}</td>
           <td>{{b.1}}</td>
@@ -28,6 +31,46 @@
           <td>{{b.5}}</td>
         </tr>
         {% endfor %}
+        <tr>
+          <td colspan="{{ col|length }}" class="text-end">總消費金額：{{self_tamount}}</td> <!--讓此欄位背景渲染整個欄位，並讓字體利立中央-->
+        </tr>
+      </tbody>
+    </table>
+
+    <!--別人購買的清單-->
+    <table class="table table-info mt-5">
+      <thead class="table-info">
+        <tr class="text-center fs-3">
+          <th colspan="{{ col|length }}">別人的購買清單</th> <!--讓此欄位背景渲染整個欄位，並讓字體利立中央-->
+        </tr>
+        <tr>
+          {% for a in col %}
+          <th >{{a}}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in another_data %}
+        <tr>
+          <td>{{c.0}}</td>
+          <td>{{c.1}}</td>
+          <td>{{c.2}}</td>
+          <td>{% if c.3 == "1" %}包
+              {% elif c.3 == "2" %}支
+              {% elif c.3 == "3" %}個
+              {% elif c.3 == "4" %}尾
+              {% elif c.3 == "5" %}塊
+              {% elif c.3 == "6" %}公克
+              {% elif c.3 == "7" %}臺斤
+              {% elif c.3 == "8" %}公斤
+              {% endif %}</td>
+          <td>{{c.4}}</td>
+          <td>{{c.5}}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+          <td colspan="{{ col|length }}" class="text-end">總消費金額：{{another_tamount}}</td> <!--讓此欄位背景渲染整個欄位，並讓字體利立中央-->
+        </tr>
       </tbody>
     </table>
   </div>

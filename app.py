@@ -161,12 +161,13 @@ def all_list():
             connection = connect_data()
             conn = sql.connect(**connection.db_setting)
             cursor = conn.cursor()
+            # --抓取輸入者自己的資料
             cursor.execute(
-                "SELECT user.user_name ,buy_food_tb.item , buy_food_tb.count , buy_food_tb.kind , \
-                    buy_food_tb.amount , buy_food_tb.creat_time FROM user JOIN buy_food_tb \
-                        ON user.user_id = buy_food_tb.user_id \
-                          ORDER BY buy_food_tb.user_id DESC;")
-            result = cursor.fetchall()
+                "SELECT user.user_name ,buy_food_tb.item , buy_food_tb.count , buy_food_tb.kind , buy_food_tb.amount , buy_food_tb.creat_time \
+                    FROM user JOIN buy_food_tb ON user.user_id = buy_food_tb.user_id \
+                        WHERE user.user_id = %s ORDER BY buy_food_tb.user_id DESC;", (session["username"]))
+            self_result = cursor.fetchall()
+
             # --取欄位名稱
             col_name = []
             for col in cursor.description:
@@ -176,15 +177,35 @@ def all_list():
             for col in col_name:
                 col_name_mapped.append(chi_col_name.get(col))
             # --PO資料
-            data = []
-            for p_data in result:
-                data.append(p_data)
-            print(data)
+            self_data = []
+            for p_data in self_result:
+                self_data.append(p_data)
+            # --抓取自己的消費總金額
+            cursor.execute(
+                'SELECT SUM(amount) FROM buy_food_tb WHERE user_id = %s;', (session['username']))
+            self_tamount = cursor.fetchone()
+
+            # --抓取別人輸入的資料
+            cursor.execute(
+                "SELECT user.user_name ,buy_food_tb.item , buy_food_tb.count , buy_food_tb.kind , buy_food_tb.amount , buy_food_tb.creat_time \
+                    FROM user JOIN buy_food_tb ON user.user_id = buy_food_tb.user_id \
+                        WHERE NOT (user.user_id = %s) ORDER BY user.user_name DESC;", (session["username"]))
+            another_result = cursor.fetchall()
+            another_data = []
+            for a_data in another_result:
+                another_data.append(a_data)
+            # --抓取別人的消費金額
+            cursor.execute(
+                'SELECT SUM(amount) FROM buy_food_tb WHERE NOT(user_id = %s);', (session['username']))
+            another_tamount = cursor.fetchone()
+
+            print(self_data)
             print(col_name_mapped)
-            print(result)
+            print(self_result)
             # --
 
-            return render_template("all_list.html", col=col_name_mapped, data=data)
+            return render_template("all_list.html", col=col_name_mapped, self_data=self_data, another_data=another_data,
+                                   self_tamount=self_tamount[0], another_tamount=another_tamount[0])
 
 
 if __name__ == '__main__':
