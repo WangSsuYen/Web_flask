@@ -144,7 +144,7 @@ def insert():
                            (id, item_name, quantity, kind, price, Systime))
             conn.commit()
         succ_mesg = "資料已儲存成功!"
-        return render_template("insert.html", succ_msg=succ_mesg)
+    return render_template("insert.html", succ_msg=succ_mesg)
 
 
 @app.route("/all_list")
