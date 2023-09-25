@@ -2,44 +2,60 @@
 {% block bodyarea %}
 <div class="mt-2 p-2">
   <table class="table table-success ">
-      <thead class="table-success">
+      <thead>
         <tr class="text-center fs-3">
-          <th colspan="{{ col|length }}">您的購買清單</th> <!--讓此欄位背景渲染整個欄位，並讓字體利立中央-->
+          <th colspan="{{ col|length+2 }}">您的購買清單</th> <!--讓此欄位背景渲染整個欄位，並讓字體利立中央-->
         </tr>
         <tr>
           {% for a in col %}
-          <th >{{a}}</th>
+          <th>{{a}}</th>
           {% endfor %}
+          <th colspan="2" class="text-center">狀態</th>
         </tr>
       </thead>
       <tbody>
-        {% for b in self_data %}
-        <tr>
-          <td>{{b.0}}</td>
-          <td>{{b.1}}</td>
-          <td>{{b.2}}</td>
-          <td>{% if b.3 == "1" %}包
-              {% elif b.3 == "2" %}支
-              {% elif b.3 == "3" %}個
-              {% elif b.3 == "4" %}尾
-              {% elif b.3 == "5" %}塊
-              {% elif b.3 == "6" %}公克
-              {% elif b.3 == "7" %}臺斤
-              {% elif b.3 == "8" %}公斤
-              {% endif %}</td>
-          <td>{{b.4}}</td>
-          <td>{{b.5}}</td>
-        </tr>
-        {% endfor %}
-        <tr>
-          <td colspan="{{ col|length }}" class="text-end">總消費金額：{{self_tamount}}</td> <!--讓此欄位背景渲染整個欄位，並讓字體利立中央-->
-        </tr>
+        <form>
+          {% for b in self_data %}
+          {% set q = loop.index0 +1 %}
+          <tr>
+            <td><input type="text" class="form-control" value={{b.0}} name="sf_ower{{q}}"></td>
+            <td><input type="text" class="form-control" value={{b.1}} name="sf_item{{q}}"></td>
+            <td><input type="text" class="form-control" value={{b.2}} name="sf_count{{q}}"></td>
+            <td><input type="text" class="form-control" value=
+                {% if b.3 == "1" %}包
+                {% elif b.3 == "2" %}支
+                {% elif b.3 == "3" %}個
+                {% elif b.3 == "4" %}尾
+                {% elif b.3 == "5" %}塊
+                {% elif b.3 == "6" %}公克
+                {% elif b.3 == "7" %}臺斤
+                {% elif b.3 == "8" %}公斤
+                {% endif %}
+                name={{q}} readonly></td>
+            <td><input type="text" class="form-control" value={{b.4}} name="sf_amount{{q}}"></td>
+            <td>{{b.5}}</td>
+            <td>
+              <button type="button" class="btn btn-outline-success" title= "更新資料" name="up_click{{q}}">
+                <img src="{{url_for('static', filename='images/upload.svg') }}" width="16px" height="16px" alt="更新資料">
+              </button>
+            </td>
+            <td>
+              <button type="button" class="btn btn-outline-danger mx-3" title= "刪除資料" name="dr_click{{q}}">
+                <img src="{{url_for('static', filename='images/minus.png') }}" width="16px" height="16px" alt="刪除資料">
+              </button>
+            </td>
+          </tr>
+          {% endfor %}
+          <tr>
+            <td colspan="{{ col|length+2 }}" class="text-end">總消費金額：{{self_tamount}}</td> <!--讓此欄位背景渲染整個欄位，並讓字體利立中央-->
+          </tr>
+        </form>
       </tbody>
     </table>
 
     <!--別人購買的清單-->
     <table class="table table-info mt-5">
-      <thead class="table-info">
+      <thead>
         <tr class="text-center fs-3">
           <th colspan="{{ col|length }}">別人的購買清單</th> <!--讓此欄位背景渲染整個欄位，並讓字體利立中央-->
         </tr>
